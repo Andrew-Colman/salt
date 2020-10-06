@@ -1134,10 +1134,9 @@ def _cleanup_module_namespace(loaded_base_name):
     """
     Clean module namespace
     """
-    for name in list(sys.modules):
+    for name in list(sys.modules.copy()):
         if name.startswith(loaded_base_name):
-            mod = sys.modules.pop(name)
-            del mod
+            del sys.modules[name]
 
 
 # TODO: move somewhere else?
