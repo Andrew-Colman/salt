@@ -1136,11 +1136,13 @@ def _cleanup_module_namespace(loaded_base_name, remove_none_modules=False):
     """
     for name in list(sys.modules):
         if name.startswith(loaded_base_name):
-            sys.modules[name] = None
-    if remove_none_modules is True:
-        for name in list(sys.modules):
-            if name.startswith(loaded_base_name) and sys.modules[name] is None:
-                del sys.modules[name]
+            if remove_none_modules:
+                if sys.modules[name] is None:
+                    del sys.modules[name]
+            else:
+                mod = sys.modules[name]
+                sys.modules[name] = None
+                del mod
 
 
 # TODO: move somewhere else?
