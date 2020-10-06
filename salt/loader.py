@@ -1130,7 +1130,7 @@ def _mod_type(module_path):
     return "ext"
 
 
-def _cleanup_module_namespace(loaded_base_name):
+def _cleanup_module_namespace(loaded_base_name):  # pragma: no cover
     """
     Clean module namespace
     """
