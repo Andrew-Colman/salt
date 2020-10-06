@@ -1130,13 +1130,17 @@ def _mod_type(module_path):
     return "ext"
 
 
-def _cleanup_module_namespace(loaded_base_name):
+def _cleanup_module_namespace(loaded_base_name, remove_none_modules=False):
     """
     Clean module namespace
     """
-    for name in list(sys.modules.copy()):
+    for name in list(sys.modules):
         if name.startswith(loaded_base_name):
-            del sys.modules[name]
+            sys.modules[name] = None
+    if remove_none_modules is True:
+        for name in list(sys.modules):
+            if name.startswith(loaded_base_name) and sys.modules[name] is None:
+                del sys.modules[name]
 
 
 # TODO: move somewhere else?
@@ -1238,6 +1242,8 @@ class LazyLoader(salt.utils.lazy.LazyDict):
             )
             # This finalizer does not need to run when the process is exiting
             finalizer.atexit = False
+            # Remove any modules matching self.loaded_base_name that have been set to None
+            _cleanup_module_namespace(self.loaded_base_name, remove_none_modules=True)
         self.mod_type_check = mod_type_check or _mod_type
 
         if "__context__" not in self.pack:
