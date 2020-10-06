@@ -1234,9 +1234,9 @@ class LazyLoader(salt.utils.lazy.LazyDict):
             self.loaded_base_name = loaded_base_name
         else:
             self.loaded_base_name = "{}_{}".format(LOADED_BASE_NAME, id(self))
-        weakref.finalize(
-            self, _cleanup_module_namespace, "{}".format(self.loaded_base_name)
-        )
+            weakref.finalize(
+                self, _cleanup_module_namespace, "{}".format(self.loaded_base_name)
+            )
         self.mod_type_check = mod_type_check or _mod_type
 
         if "__context__" not in self.pack:
